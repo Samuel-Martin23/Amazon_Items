@@ -16,7 +16,7 @@ def get_driver() -> webdriver:
     Search for LAST_CHANGE
     """
     chrome_options: webdriver.chrome.options.Options = Options()
-    # chrome_options.headless = True
+    chrome_options.headless = True
     if operating_system() == "Windows":
         path_to_script: str = sys_output(f"cd \\Users\\{user_name()} && dir /s /b chromedriver.exe")
         chrome_options.binary_location = sys_output(f"cd \\Users\\{user_name()} && dir /s /b chromium.exe")
