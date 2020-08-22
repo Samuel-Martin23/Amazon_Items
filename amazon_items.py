@@ -21,8 +21,9 @@ def get_links(search: str) -> List[str]:
     next_page: int = 1
     product_result: int = 1
     while True:
-        anchor_tag_product: Union[None, webdriver.remote] = check_xpath_element(
-                                                            driver, amazon_product_results.format(product_result))
+        anchor_tag_product: Union[None, webdriver.remote] = check_xpath_element(driver, amazon_product_results.format(
+            product_result))
+
         if anchor_tag_product is None:
             if next_page == max_num_of_pages:
                 break
@@ -78,7 +79,6 @@ def get_product_info(link: str) -> None:
 
     if price_range[0] <= float(product_price.split("$")[1]) <= price_range[1] and laplace_distribution >= min_laplace \
             and total_number_of_reviews >= min_reviews:
-
         print("Writing product info...")
         with open(get_desktop_path(), "a") as file:
             file.write(f"Name: {check_xpath_element(driver, amazon_product_name_text).text}\n")
@@ -123,7 +123,7 @@ def hover_over_star_ratings() -> Union[None, int]:
 
 def get_avg_rating(link: str) -> str:
     try:
-        avg_rating: str = check_xpath_element(driver, amazon_product_avg_rating).text
+        avg_rating: Union[None, str] = check_xpath_element(driver, amazon_product_avg_rating).text
     except AttributeError:
         print("Avg Rating " + link)
         avg_rating = "0 out of 5"
@@ -132,7 +132,7 @@ def get_avg_rating(link: str) -> str:
 
 def get_product_price(link: str) -> str:
     try:
-        product_price: str = check_xpath_element(driver, amazon_product_price_text).text
+        product_price: Union[None, str] = check_xpath_element(driver, amazon_product_price_text).text
         if "," in product_price:
             product_price = product_price.replace(",", "")
     except AttributeError:
