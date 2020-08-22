@@ -3,7 +3,7 @@ from platform import system
 from getpass import getuser
 from selenium import webdriver
 from subprocess import (Popen, PIPE, run)
-from typing import (Union, List, Optional, Any)
+from typing import (Union, List, Optional)
 from selenium.webdriver.chrome.options import Options
 from selenium.common.exceptions import TimeoutException
 from selenium.webdriver.support.ui import WebDriverWait

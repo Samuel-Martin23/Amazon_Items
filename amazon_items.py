@@ -1,4 +1,5 @@
 from typing import Tuple, List, Union, Optional
+from selenium.common.exceptions import JavascriptException
 from selenium.webdriver.common.action_chains import ActionChains
 from automation_functions import (get_driver, check_xpath_element, quit_chromium, scroll_down,
                                   webdriver, operating_system, user_name, sleep)
@@ -121,6 +122,8 @@ def hover_over_star_ratings() -> Optional[bool]:
     try:
         ActionChains(driver).move_to_element(check_xpath_element(driver, amazon_product_star_ratings_label)).perform()
     except AttributeError:
+        return True
+    except JavascriptException:
         return True
 
 
