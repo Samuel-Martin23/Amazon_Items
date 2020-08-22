@@ -106,6 +106,8 @@ def check_number(web_driver, number: str) -> int:
     num: str = num.text.split(" ")[0]
     if "," in num:
         return int(num.replace(",", ""))
+    else:
+        return int(num)
 
 
 def get_desktop_path() -> str:
@@ -145,7 +147,7 @@ def get_product_price(link: str) -> str:
             return "$0"
 
         if "," in product_price:
-            product_price = product_price.replace(",", "")
+            return product_price.replace(",", "")
 
     return product_price
 
