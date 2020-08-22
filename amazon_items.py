@@ -1,4 +1,4 @@
-from typing import Tuple, List, Union
+from typing import Tuple, List, Union, Optional
 from selenium.webdriver.common.action_chains import ActionChains
 from automation_functions import (get_driver, check_xpath_element, quit_chromium, scroll_down,
                                   webdriver, operating_system, user_name, sleep)
@@ -21,7 +21,7 @@ def get_links(search: str) -> List[str]:
     next_page: int = 1
     product_result: int = 1
     while True:
-        anchor_tag_product: Union[None, webdriver.remote] = check_xpath_element(driver, amazon_product_results.format(
+        anchor_tag_product: Optional[webdriver.remote] = check_xpath_element(driver, amazon_product_results.format(
             product_result))
 
         if anchor_tag_product is None:
@@ -65,7 +65,7 @@ def open_product_links(url_links: List[str]) -> None:
 def get_product_info(link: str) -> None:
     print("Getting product info...")
 
-    if hover_over_star_ratings() == 0:
+    if hover_over_star_ratings():
         return
 
     avg_rating: str = get_avg_rating(link)
@@ -91,7 +91,7 @@ def get_product_info(link: str) -> None:
 
 
 def get_number_percent(star_rating: str) -> Union[int, float]:
-    percent: Union[None, webdriver.remote] = check_xpath_element(driver, star_rating)
+    percent: Optional[webdriver.remote] = check_xpath_element(driver, star_rating)
     if percent is None:
         return 0
     else:
@@ -99,12 +99,13 @@ def get_number_percent(star_rating: str) -> Union[int, float]:
 
 
 def check_number(web_driver, number: str) -> int:
-    num: Union[None, str] = check_xpath_element(web_driver, number).text.split(" ")[0]
+    num: Optional[webdriver.remote] = check_xpath_element(web_driver, number)
     if num is None:
         exit(1)
+
+    num: str = num.text.split(" ")[0]
     if "," in num:
-        num = num.replace(",", "")
-    return int(num)
+        return int(num.replace(",", ""))
 
 
 def get_desktop_path() -> str:
@@ -114,33 +115,37 @@ def get_desktop_path() -> str:
         return f"/Users/{user_name()}/Desktop/amazon_report.txt"
 
 
-def hover_over_star_ratings() -> Union[None, int]:
+def hover_over_star_ratings() -> Optional[bool]:
     try:
         ActionChains(driver).move_to_element(check_xpath_element(driver, amazon_product_star_ratings_label)).perform()
     except AttributeError:
-        return 0
+        return True
 
 
 def get_avg_rating(link: str) -> str:
-    try:
-        avg_rating: Union[None, str] = check_xpath_element(driver, amazon_product_avg_rating).text
-    except AttributeError:
+    avg_rating: Optional[webdriver.remote] = check_xpath_element(driver, amazon_product_avg_rating)
+
+    if avg_rating is None:
         print("Avg Rating " + link)
-        avg_rating = "0 out of 5"
-    return avg_rating
+        return "0 out of 5"
+    else:
+        return avg_rating.text
 
 
 def get_product_price(link: str) -> str:
-    try:
-        product_price: Union[None, str] = check_xpath_element(driver, amazon_product_price_text).text
+    product_cost: Optional[webdriver.remote] = check_xpath_element(driver, amazon_product_price_text)
+
+    if product_cost is None:
+        print("Product Price " + link)
+        return "$0"
+    else:
+        product_price: str = product_cost.text
+
+        if not product_price:
+            return "$0"
+
         if "," in product_price:
             product_price = product_price.replace(",", "")
-    except AttributeError:
-        print("Product Price " + link)
-        product_price = "$0"
-
-    if not product_price:
-        product_price = "$0"
 
     return product_price
 

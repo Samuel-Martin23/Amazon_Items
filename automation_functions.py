@@ -2,8 +2,8 @@ from time import sleep
 from platform import system
 from getpass import getuser
 from selenium import webdriver
-from typing import (Union, List)
 from subprocess import (Popen, PIPE, run)
+from typing import (Union, List, Optional, Any)
 from selenium.webdriver.chrome.options import Options
 from selenium.common.exceptions import TimeoutException
 from selenium.webdriver.support.ui import WebDriverWait
@@ -26,7 +26,7 @@ def get_driver() -> webdriver:
     return webdriver.Chrome(path_to_script, options=chrome_options)
 
 
-def check_xpath_element(driver: webdriver, xpath: str) -> Union[None, webdriver.remote]:
+def check_xpath_element(driver: webdriver, xpath: str) -> Optional[Any]:
     try:
         element: webdriver.remote = WebDriverWait(driver, 2).until(
             EC.presence_of_element_located(("xpath", xpath)))
@@ -37,7 +37,7 @@ def check_xpath_element(driver: webdriver, xpath: str) -> Union[None, webdriver.
     return element
 
 
-def check_xpath_elements(driver: webdriver, xpath: str) -> Union[None, webdriver.remote]:
+def check_xpath_elements(driver: webdriver, xpath: str) -> Optional[Any]:
     try:
         elements: webdriver.remote = WebDriverWait(driver, 2).until(
             EC.presence_of_all_elements_located(("xpath", xpath)))
