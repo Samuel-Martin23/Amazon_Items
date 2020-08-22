@@ -78,7 +78,7 @@ def get_product_info(link: str) -> None:
     laplace_distribution: float = round((five_star_num_reviews + four_star_num_reviews + 1) /
                                         (total_number_of_reviews + 2), 2)
 
-    if price_range[0] <= float(product_price.split("$")[1]) <= price_range[1] and laplace_distribution >= min_laplace \
+    if price_range[0] <= check_price(product_price) <= price_range[1] and laplace_distribution >= min_laplace \
             and total_number_of_reviews >= min_reviews:
         print("Writing product info...")
         with open(get_desktop_path(), "a") as file:
@@ -102,7 +102,7 @@ def get_number_percent(star_rating: str) -> Union[int, float]:
 def check_number(web_driver, number: str) -> int:
     num: Optional[webdriver.remote] = check_xpath_element(web_driver, number)
     if num is None:
-        exit(1)
+        return 0
 
     num: str = num.text.split(" ")[0]
     if "," in num:
@@ -132,7 +132,7 @@ def get_avg_rating(link: str) -> str:
 
     if avg_rating is None:
         print("Avg Rating " + link)
-        return "-1 out of -1"
+        return "-100"
     else:
         return avg_rating.text
 
@@ -142,17 +142,26 @@ def get_product_price(link: str) -> str:
 
     if product_cost is None:
         print("Product Price " + link)
-        return "$-1"
+        return "-100"
     else:
         product_price: str = product_cost.text
 
         if not product_price:
-            return "$-1"
+            return "-100"
 
         if "," in product_price:
             return product_price.replace(",", "")
 
     return product_price
+
+
+def check_price(price: str):
+    if "$" in price:
+        price = price.split("$")[1]
+    if "/" in price:
+        price = price.split("/")[0]
+
+    return float(price)
 
 
 driver: webdriver = get_driver()
