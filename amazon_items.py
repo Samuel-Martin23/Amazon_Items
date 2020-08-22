@@ -129,7 +129,7 @@ def get_avg_rating(link: str) -> str:
 
     if avg_rating is None:
         print("Avg Rating " + link)
-        return "0 out of 5"
+        return "-1 out of -1"
     else:
         return avg_rating.text
 
@@ -139,12 +139,12 @@ def get_product_price(link: str) -> str:
 
     if product_cost is None:
         print("Product Price " + link)
-        return "$0"
+        return "$-1"
     else:
         product_price: str = product_cost.text
 
         if not product_price:
-            return "$0"
+            return "$-1"
 
         if "," in product_price:
             return product_price.replace(",", "")

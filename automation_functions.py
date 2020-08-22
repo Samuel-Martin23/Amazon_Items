@@ -26,7 +26,7 @@ def get_driver() -> webdriver:
     return webdriver.Chrome(path_to_script, options=chrome_options)
 
 
-def check_xpath_element(driver: webdriver, xpath: str) -> Optional[Any]:
+def check_xpath_element(driver: webdriver, xpath: str) -> Optional[type(webdriver.remote)]:
     try:
         element: webdriver.remote = WebDriverWait(driver, 2).until(
             EC.presence_of_element_located(("xpath", xpath)))
@@ -37,7 +37,7 @@ def check_xpath_element(driver: webdriver, xpath: str) -> Optional[Any]:
     return element
 
 
-def check_xpath_elements(driver: webdriver, xpath: str) -> Optional[Any]:
+def check_xpath_elements(driver: webdriver, xpath: str) -> Optional[type(webdriver.remote)]:
     try:
         elements: webdriver.remote = WebDriverWait(driver, 2).until(
             EC.presence_of_all_elements_located(("xpath", xpath)))
