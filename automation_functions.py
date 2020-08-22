@@ -26,9 +26,9 @@ def get_driver() -> webdriver:
     return webdriver.Chrome(path_to_script, options=chrome_options)
 
 
-def check_xpath_element(driver: webdriver, xpath: str) -> Optional[type(webdriver.remote)]:
+def check_xpath_element(driver: webdriver, xpath: str, wait_time: int = 2) -> Optional[type(webdriver.remote)]:
     try:
-        element: webdriver.remote = WebDriverWait(driver, 2).until(
+        element: webdriver.remote = WebDriverWait(driver, wait_time).until(
             EC.presence_of_element_located(("xpath", xpath)))
     except TimeoutException:
         print("\nElement(By.XPATH" + ", " + xpath + ") does not exist or is out of reach.")
@@ -37,9 +37,9 @@ def check_xpath_element(driver: webdriver, xpath: str) -> Optional[type(webdrive
     return element
 
 
-def check_xpath_elements(driver: webdriver, xpath: str) -> Optional[type(webdriver.remote)]:
+def check_xpath_elements(driver: webdriver, xpath: str, wait_time: int = 2) -> Optional[type(webdriver.remote)]:
     try:
-        elements: webdriver.remote = WebDriverWait(driver, 2).until(
+        elements: webdriver.remote = WebDriverWait(driver, wait_time).until(
             EC.presence_of_all_elements_located(("xpath", xpath)))
     except TimeoutException:
         print("\nElements(By.XPATH" + ", " + xpath + ") does not exist or is out of reach.")
